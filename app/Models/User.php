@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -56,5 +57,13 @@ class User extends Authenticatable
     public function comment()
     {
         return $this->hasMany(Comment::class);
+    }
+    
+    public function suggestedUsers()
+    {
+        return User::where('id', '!=', Auth::user()->id)
+            ->inRandomOrder()
+            ->limit(5)
+            ->get();
     }
 }

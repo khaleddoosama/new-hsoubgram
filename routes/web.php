@@ -5,9 +5,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -17,14 +15,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        Route::controller(PostController::class)->group(function(){
+        Route::get('/','index')->name('home_page');
+        Route::get('/post/create', 'create')->name('create_post');
+        Route::post('/post/create', 'store')->name('store_post');
+        Route::get('/post/{post:slug}', 'show')->name('show_post');
+        });
+        
+    Route::post('/post/{post:slug}/comment', [CommentController::class, 'store'])->name('comment_store');   
 });
 
-Route::get('/post/create',[PostController::class,'create'])->name('create_post')->middleware('auth');
-Route::post('/post/create',[PostController::class,'store'])->name('store_post')->middleware('auth');
-Route::get('/post/{post:slug}',[PostController::class,'show'])->name('show_post')
-->middleware('auth');
-Route::post('/post/{post:slug}/comment',[CommentController::class,'store'])
-->name('comment_store');
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
