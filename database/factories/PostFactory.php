@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 /**
@@ -21,7 +22,7 @@ class PostFactory extends Factory
         return [
            'description'=>fake()->paragraph(),
            'slug' => Str::slug(fake()->sentence(6)),
-           'user_id'=>\App\Models\User::inRandomOrder()->first()->id,
+           'user_id'=>User::factory(),
            'image'=>'posts/'.fake()->randomElement($images),
            'likes'=>fake()->numberBetween(1,10),
 
