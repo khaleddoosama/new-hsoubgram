@@ -13,11 +13,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        $post=Post::all();
-        $suggestedusers=Auth::user()->suggestedUsers();
-       return view('posts.index',['post'=>$post,'suggestedusers'=>$suggestedusers]);
+        $post           = Post::all();
+        $suggestedusers = Auth::user()->suggestedUsers();
+        return view('posts.index', ['post' => $post, 'suggestedusers' => $suggestedusers]);
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -39,14 +38,14 @@ class PostController extends Controller
 
         $image = $request['image']->store('posts', 'public');
 
-        $data['image'] = $image;
-        $data['slug']    = Str::random(10);
-        $data['user_id'] = Auth::user()->id;
-        $data['description']=$request->description;
+        $data['image']       = $image;
+        $data['slug']        = Str::random(10);
+        $data['user_id']     = Auth::user()->id;
+        $data['description'] = $request->description;
         Post::create($data);
         // Auth::user()->posts()->create($data);
         return redirect()->back();
-        
+
     }
 
     /**
@@ -54,7 +53,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view ('posts.show',compact('post'));
+        return view('posts.show', compact('post'));
     }
 
     /**
@@ -80,4 +79,12 @@ class PostController extends Controller
     {
         //
     }
+
+    public function explore()
+    {
+        $posts = Post::whereRelation('owner', 'private_account', '=', 0)
+            ->whereNot('user_id', auth()->id())
+            ->simplePaginate(12);
+        return view('posts.explore', compact('posts'));
+   }
 }

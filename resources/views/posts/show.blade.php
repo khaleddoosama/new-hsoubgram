@@ -6,8 +6,9 @@
         <div class="h-full md:w-7/12 bg-black flex items-center">
             <img alt="{{ $post->description }}" src="{{ asset('storage/' . $post->image) }}"
                 class="max-h-screen object-cover mx-auto">
-        </div>
-
+        
+            </div>
+        
         {{-- Right Side --}}
         <div class="flex w-full flex-col bg-white md:w-5/12">
 
@@ -15,7 +16,7 @@
             <div class="border-b-2">
                 <div class="flex items-center p-5">
 
-                    <img src="{{ $post->owner->image }}" alt="{{ $post->owner->username }}"
+                    <img src="{{ Str::startsWith($post->owner->image, 'https') ? $post->owner->image : asset('storage/' . $post->owner->image) }}"  alt="{{ $post->owner->username }}"
                         class="mr-5 h-10 w-10 rounded-full">
                     <a href="/profile" class="font-bold">{{ $post->owner->username }}</a>
                 </div>
@@ -26,7 +27,7 @@
             <div class="grow">
                 @foreach ($post->comments as $comment)
                     <div class="flex items-start px-5 py-2">
-                        <img src="{{ $comment->owner->image }}" alt="" class="h-100 mr-5 w-10 rounded-full">
+                        <img class="h-10 mr-5 w-10 rounded-full" src="{{ Str::startsWith($comment->owner->image, 'https') ? $comment->owner->image : asset('storage/' . $comment->owner->image) }}" alt="" >
                         <div class="flex flex-col">
                             <div>
                                 <a href="/{{ $comment->owner->username }}"
@@ -42,8 +43,23 @@
                 @endforeach
 
             </div>
-
-
+            <div class="p-3">
+                <a href="{{ route('post.like', $post->slug) }}">
+        
+                    @if($post->liked(Auth::user()->id))
+        
+                    <li class="bx bxs-heart text-red-600 text-3xl hover:text-gray-400 cursor-pointer mr-3">
+        
+                    @else
+        
+                    <li class="bx bx-heart text-3xl hover:text-gray-400 cursor-pointer mr-3">
+        
+                    @endif  
+                    </li>
+                </a>
+               
+            </div>
+            
             <div class="border-t p-5">
                 <form action="/post/{{ $post->slug }}/comment" method="POST">
                     @csrf

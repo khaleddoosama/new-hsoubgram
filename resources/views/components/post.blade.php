@@ -3,7 +3,7 @@
 
 {{-- Header --}}
 <div class="card-header">
-    <img src="{{ $post->owner->image }}" class="h-9 w-9 mr-3 rounded-full">
+    <img src="{{ Str::startsWith($post->owner->image, 'https') ? $post->owner->image : asset('storage/' . $post->owner->image) }}"  class="h-9 w-9 mr-3 rounded-full">
     <a href="/{{$post->owner->username  }}" class="font-bold">{{ $post->owner->username }}</a>
 </div>
 
@@ -16,6 +16,23 @@
         class="h-auto w-full object-cover">
     </div>
 
+
+    <div class="p-3">
+        <a href="{{ route('post.like', $post->slug) }}">
+
+            @if($post->liked(Auth::user()->id))
+
+            <li class="bx bxs-heart text-red-600 text-3xl hover:text-gray-400 cursor-pointer mr-3">
+
+            @else
+
+            <li class="bx bx-heart text-3xl hover:text-gray-400 cursor-pointer mr-3">
+
+            @endif  
+            </li>
+        </a>
+       
+    </div>
 
     <div class="p-3">
         <a href="/{{ $post->owner->username }}" class="font-bold">{{ $post->owner->username }}</a>

@@ -23,7 +23,7 @@
             <div class="flex flex-row text-sm">
                 <div class="mr-5">
                     <a href="/{{ auth()->user()->username }}">
-                        <img src="{{ auth()->user()->image }}" alt="{{ auth()->user()->username }}"
+                        <img src="{{ Str::startsWith(Auth::user()->image, 'https') ? Auth::user()->image : asset('storage/' . Auth::user()->image ) }}"  alt="{{ auth()->user()->username }}"
                             class="border border-gray-300 rounded-full h-12 w-12">
                     </a>
                 </div>

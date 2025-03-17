@@ -21,6 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'username',
+        'bio',
         'image',
         'email',
         'password',
@@ -65,5 +66,9 @@ class User extends Authenticatable
             ->inRandomOrder()
             ->limit(5)
             ->get();
+    }
+    public function likes()
+    {
+        return $this->belongsToMany(Post::class,'likes');
     }
 }

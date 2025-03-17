@@ -25,6 +25,10 @@
 }
 
 
+
+
+
+
 @layer utilities {
     input[type="file"]::file-selector-button {
         @apply inline-flex items-center pr-5 pl-10 py-2 bg-gray-800 border border-transparent font-semibold text-xs text-white uppercase
