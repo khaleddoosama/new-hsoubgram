@@ -22,13 +22,13 @@
 
             <div class="flex flex-row text-sm">
                 <div class="mr-5">
-                    <a href="/{{ auth()->user()->username }}">
+                    <a href="{{ route('userprofile',auth()->user()->username) }}">
                         <img src="{{ Str::startsWith(Auth::user()->image, 'https') ? Auth::user()->image : asset('storage/' . Auth::user()->image ) }}"  alt="{{ auth()->user()->username }}"
                             class="border border-gray-300 rounded-full h-12 w-12">
                     </a>
                 </div>
                 <div class="flex flex-col">
-                    <a href="/{{ auth()->user()->username }}" class="font-bold">{{ auth()->user()->username }}</a>
+                    <a href="{{ route('userprofile',auth()->user()->username) }}" class="font-bold">{{ auth()->user()->username }}</a>
                     <div class="text-gray-500 text-sm">
                         {{ auth()->user()->name }}
                     </div>
@@ -46,15 +46,35 @@
 
                                 <div class="mr-5">
 
-                                    <a href="/{{ $suggested->username }}">
+                                   <a href="{{ route('userprofile',$suggested->username) }}">
                                         <img src="{{ $suggested->image }}"
                                             class="rounded-full h-9 w-9 border border-gray-300">
                                     </a>
                                 </div>
                                 <div class="flex flex-col grow">
-                                    <a class="font-bold text-black" href="/{{ $suggested->username }}" >
+                                    <a class="font-bold text-black" href="{{ route('userprofile',$suggested->username) }}" >
                                         {{ $suggested->username }}</a>
                                         <div class="text-gray-500 text-sm">{{ $suggested->name }}</div>
+                                </div>
+                                <div>
+                                    @if(auth()->user()->isFollowing($suggested))
+                                        <!-- Unfollow Button -->
+                                        <form action="{{ route('unfollow', $suggested) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-sm text-red-500 font-bold">
+                                                {{ __('Unfollow') }}
+                                            </button>
+                                        </form>
+                                    @else
+                                        <!-- Follow Button -->
+                                        <form action="{{ route('follow', $suggested) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="text-sm text-blue-500 font-bold">
+                                                {{ __('Follow') }}
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </li>
                         @endforeach

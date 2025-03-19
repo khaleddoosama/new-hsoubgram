@@ -33,7 +33,12 @@ class ProfileController extends Controller
             $imagePath     = $request->file('image')->store('users','public'); // Store in a subfolder
             $data['image'] =$imagePath ;       // Convert path for asset function
         }
-
+        if($request->private_account=='on'){
+            $data['private_account']=1;
+        }
+        else{
+            $data['private_account']=0;
+        }
         // Fill only validated data
         $user->fill($data);
 

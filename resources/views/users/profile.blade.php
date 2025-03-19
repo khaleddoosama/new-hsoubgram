@@ -21,6 +21,27 @@
                        class="w-32 h-8 border text-sm font-bold py-1 px-1 rounded-md border-neutral-300 text-center">
                         {{ __('Edit Profile') }}
                     </a>
+                @else
+                @if(auth()->user()->is_pending($user))
+                <span class="w-30 bg-gray-400 text-white px-3 rounded text-center self-start">{{ __('Pending') }}</span>   
+                @elseif (auth()->user()->following()->where('following_user_id', $user->id)->exists())
+                <!-- Unfollow Button -->
+                <form action="{{ route('unfollow', $user) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="w-30 bg-red-500 text-white px-3 py-1 rounded text-center mt-2">
+                        {{ __('Unfollow') }}
+                    </button>
+                </form>
+            @else
+                <!-- Follow Button -->
+                <form action="{{ route('follow', $user) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="w-30 bg-blue-400 text-white px-3 py-1 rounded text-center mt-2">
+                        {{ __('Follow') }}
+                    </button>
+                </form>
+            @endif
                 @endif
             @endauth
             @guest
@@ -46,6 +67,28 @@
                         {{ $user->posts->count() > 1 ? __('posts') : __('post') }}
                     </span>
                 </li>
+
+
+                <li class="flex flex-col md:flex-row text-center">
+                    <div class="md:mr-1 font-bold md:font-normal">
+                        {{ $user->follower()->where('confirmed',true)->count() }}
+                    </div>
+                    <span class="text-neutral-500 md:text-black">
+                        {{  $user->follower()->where('confirmed',true)->count() > 1 ? __('followers') : __('follower') }}
+                    </span>
+                </li>
+
+
+                <li class="flex flex-col md:flex-row text-center">
+                    <div class="md:mr-1 font-bold md:font-normal">
+                        {{ $user->following()->wherePivot('confirmed',true)->get()->count() }}
+                    </div>
+                    <span class="text-neutral-500 md:text-black">
+                        {{ __('following') }}
+                    </span>
+                </li>
+
+
             </ul>
         </div>
     </div>
@@ -53,7 +96,7 @@
 
     {{-- Bottom --}}
 
-    @if ($user->posts()->count() > 0 and ($user->private_account == false or auth()->id() == $user->id))
+    @if ($user->posts()->count() > 0 and ($user->private_account == false or auth()->id() == $user->id or auth()->user()->isFollowing($user)))
     <div class="grid grid-cols-3 gap-4 my-5">
         @foreach ($user->posts as $post)
             <a class="aspect-square block w-full" href="/post/{{ $post->slug }}">
@@ -66,7 +109,7 @@
                                 <li class="flex items-center text-2xl text-white font-bold ltr:mr-2 rtl:ml-2">
                                     <i class='bx bxs-heart ltr:mr-1 rtl:ml-1'></i>
                                         <span>
-                                    {{-- {{ $post->likes()->count() }} --}}
+                                    {{ $post->likes()->count() }}
                                         </span>
                                 </li>
                                 <li class="flex items-center text-2xl text-white font-bold">

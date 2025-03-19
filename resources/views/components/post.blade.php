@@ -4,7 +4,7 @@
 {{-- Header --}}
 <div class="card-header">
     <img src="{{ Str::startsWith($post->owner->image, 'https') ? $post->owner->image : asset('storage/' . $post->owner->image) }}"  class="h-9 w-9 mr-3 rounded-full">
-    <a href="/{{$post->owner->username  }}" class="font-bold">{{ $post->owner->username }}</a>
+    <a href="{{ route('userprofile',$post->owner->username) }}" class="font-bold">{{ $post->owner->username }}</a>
 </div>
 
 

@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -36,5 +38,8 @@ Route::middleware('auth')->group(function () {
         });
         Route::post('/post/{post:slug}/comment', [CommentController::class, 'store'])->name('comment_store');
         Route::get('/post/{post:slug}/like', LikeController::class)->name('post.like');
+        Route::post('send_follow/{user}',[FollowController::class,'follow'])->name('follow');
+        Route::delete('/unfollow/{user}', [FollowController::class, 'unfollow'])->name('unfollow');
+
            
 });

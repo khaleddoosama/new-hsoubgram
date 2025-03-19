@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -25,6 +24,7 @@ class User extends Authenticatable
         'image',
         'email',
         'password',
+        'private_account',
     ];
 
     /**
@@ -46,7 +46,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
 
@@ -59,16 +59,57 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
-    
+
     public function suggestedUsers()
     {
-        return User::where('id', '!=', Auth::user()->id)
+
+        $user = Auth::user();
+
+        return User::where('id', '!=', $user->id)
+            ->whereNotIn('id', $user->following()->pluck('users.id')) // Exclude followed users
             ->inRandomOrder()
             ->limit(5)
             ->get();
     }
     public function likes()
     {
-        return $this->belongsToMany(Post::class,'likes');
+        return $this->belongsToMany(Post::class, 'likes');
     }
+
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'user_id', 'following_user_id')->withPivot('confirmed');
+    }
+
+    public function follower()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'following_user_id', 'user_id')->withPivot('confirmed');
+    }
+
+    public function follow(User $user)
+    {
+        if ($this->id === $user->id) {
+            return; // Prevent users from following themselves
+        }
+
+        if ($user->private_account) {
+            // If the user has a private account, the follow request is pending
+            $this->following()->attach($user, ['confirmed' => false]);
+        } else {
+            // If the user has a public account, the follow is automatically confirmed
+            $this->following()->attach($user, ['confirmed' => true]);
+        }
+
+    }
+
+    public function isFollowing(User $user)
+    {
+        return $this->following()->where('following_user_id', $user->id)->where('confirmed',true)->exists();
+    }
+
+    public function is_pending(User $user)
+    {
+       return $this->following()->where('following_user_id', $user->id)->where('confirmed', false)->exists();
+    }
+
 }
