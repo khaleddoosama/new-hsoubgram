@@ -17,23 +17,12 @@
     </div>
 
 
-    <div class="p-3">
-        <a href="{{ route('post.like', $post->slug) }}">
-
-            @if($post->liked(Auth::user()->id))
-
-            <li class="bx bxs-heart text-red-600 text-3xl hover:text-gray-400 cursor-pointer mr-3">
-
-            @else
-
-            <li class="bx bx-heart text-3xl hover:text-gray-400 cursor-pointer mr-3">
-
-            @endif  
-            </li>
-        </a>
-       
+    <div class="p-3 flex flex-row">
+        @livewire('like',['post'=>$post])
+<a href="{{ route('show_post',$post->slug) }}">
+    <i class="bx bx-comment text-3xl hover:text-gray-400 cursor-pointer mr-3"></i>
+</a>
     </div>
-
     <div class="p-3">
         <a href="/{{ $post->owner->username }}" class="font-bold">{{ $post->owner->username }}</a>
         {{ $post->description }}

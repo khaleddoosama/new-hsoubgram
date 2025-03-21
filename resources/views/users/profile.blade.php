@@ -45,8 +45,12 @@
                 @endif
             @endauth
             @guest
-                <a href="/{{ $user->username }}/follow"
-                   class="w-30 bg-blue-400 text-white px-3 py-1 rounded text-center mt-2">{{ __('Follow') }}</a>
+            <form action="{{ route('follow', $user) }}" method="POST">
+                @csrf
+                <button type="submit" class="w-30 bg-blue-400 text-white px-3 py-1 rounded text-center mt-2">
+                    {{ __('Follow') }}
+                </button>
+            </form>
             @endguest
         </div>
 
@@ -96,27 +100,23 @@
 
     {{-- Bottom --}}
 
-    @if ($user->posts()->count() > 0 and ($user->private_account == false or auth()->id() == $user->id or auth()->user()->isFollowing($user)))
+    @if ($user->posts()->count() > 0 && (!$user->private_account || auth()->id() == $user->id || (auth()->check() && auth()->user()->isFollowing($user))))
     <div class="grid grid-cols-3 gap-4 my-5">
         @foreach ($user->posts as $post)
             <a class="aspect-square block w-full" href="/post/{{ $post->slug }}">
                 <div class="group relative">
                     <img class="w-full aspect-square object-cover" src="{{ asset('storage/'.$post->image )}}">
+
                     @if (auth()->id() === $post->user_id)
-                        <div
-                            class="absolute top-0 ltr:left-0 rtl:right-0 w-full h-full flex flex-row justify-center items-center group-hover:bg-black/40">
+                        <div class="absolute top-0 left-0 w-full h-full flex justify-center items-center group-hover:bg-black/40">
                             <ul class="invisible group-hover:visible flex flex-row">
-                                <li class="flex items-center text-2xl text-white font-bold ltr:mr-2 rtl:ml-2">
-                                    <i class='bx bxs-heart ltr:mr-1 rtl:ml-1'></i>
-                                        <span>
-                                    {{ $post->likes()->count() }}
-                                        </span>
+                                <li class="flex items-center text-2xl text-white font-bold mr-2">
+                                    <i class='bx bxs-heart mr-1'></i>
+                                    <span>{{ $post->likes()->count() }}</span>
                                 </li>
                                 <li class="flex items-center text-2xl text-white font-bold">
-                                    <i class='bx bx-comment ltr:mr-1 rtl:ml-1'></i>
-                                    <span>
-                                    {{ $post->comments()->count() }}
-                                    </span>
+                                    <i class='bx bx-comment mr-1'></i>
+                                    <span>{{ $post->comments()->count() }}</span>
                                 </li>
                             </ul>
                         </div>
@@ -127,11 +127,12 @@
     </div>
 @else
     <div class="w-full text-center mt-20">
-        @if ($user->private_account == true and $user->id != auth()->id())
-            {{ __('This Account is Private Follow to see their photos.') }}
+        @if ($user->private_account && $user->id != auth()->id())
+            {{ __('This Account is Private. Follow to see their photos.') }}
         @else
-            {{ __('This user does not have any post.') }}
+            {{ __('This user does not have any posts.') }}
         @endif
     </div>
 @endif
+
 </x-app-layout>

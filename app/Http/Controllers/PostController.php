@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
@@ -13,8 +14,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $id=Auth::user()->following()->wherePivot('confirmed',true)->pluck('users.id');
-        $post           = Post::whereIn('user_id',$id)->latest()->get();
+        $id             = Auth::user()->following()->wherePivot('confirmed', true)->pluck('users.id');
+        $post           = Post::whereIn('user_id', $id)->latest()->get();
         $suggestedusers = Auth::user()->suggestedUsers();
         return view('posts.index', ['post' => $post, 'suggestedusers' => $suggestedusers]);
     }
@@ -62,7 +63,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        $this->authorize('update', $post);
+        return view('posts.edit', compact('post'));
     }
 
     /**
@@ -70,15 +72,36 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $this->authorize('update', $post);
+        $data = $request->validate([
+            'description' => 'required',
+            'image'       => ['nullable', 'mimes:jpeg,jpg,png,gif'],
+        ]);
+
+        if ($request->hasFile('image')) {
+            $image         = $request->file('image')->store('posts', 'public');
+            $data['image'] = $image;
+        }
+
+        $post->update($data);
+
+        return redirect()->back()->with('success', 'Post updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Post $post)
-    {
-        //
+    {   
+        $this->authorize('delete', $post);
+        if ($post->image) {
+            Storage::disk('public')->delete($post->image);
+        }
+        $user=Auth::user();
+        $post->delete();
+        
+        return view('users.profile',['user'=>$user]);
+
     }
 
     public function explore()
@@ -87,5 +110,5 @@ class PostController extends Controller
             ->whereNot('user_id', auth()->id())
             ->simplePaginate(12);
         return view('posts.explore', compact('posts'));
-   }
+    }
 }

@@ -21,16 +21,22 @@
                     <div class="grow">
                         <a href="/profile" class="font-bold">{{ $post->owner->username }}</a>
                     </div>
-                        @if ($post->owner->id == auth()->id())
-                        <a href="/post/edit/{{ $post->slug }}"><i class="bx bx-messsage-square-edit text-xl"></i></a>
-                        <form action="/p/{{ $post->slug }}/delete" method="POST">
+                        @can('update',$post)
+                        <a href="{{ route('get_update_post',$post->slug) }}"><i class="bx bx-message-square-edit text-xl"></i>
+                        </a>
+                        @endcan
+                        @can('delete',$post)
+                        <form id="delete-post-form-{{ $post->id }}" action="{{ route('post.destroy', $post->slug) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" onclick="return confirm('Are You sure?')">
-                                <i class="bx bx-message-square-x ml-2 text-xl text-red-600"></i>
+                            <button type="button" class="text-red-600" onclick="confirmDelete({{ $post->id }})">
+                                <i class="bx bx-message-square-x text-xl"></i>
                             </button>
                         </form>
-                        @elseif(auth()->user()->isFollowing($post->owner))
+                        @endcan
+
+                        @cannot('update',$post)
+                        @if(auth()->user()->isFollowing($post->owner))
                         <form action="{{ route('unfollow', $post->owner) }}" method="POST">
                             @csrf
                             @method('DELETE')
@@ -48,7 +54,7 @@
                             </button>
                         </form> 
                         @endif
-
+                        @endcannot
                 </div>
 
             </div>
@@ -76,18 +82,13 @@
                 @endforeach
 
             </div>
-            <div class="p-3">
-                <a href="{{ route('post.like', $post->slug) }}">
-
-                    @if ($post->liked(Auth::user()->id))
-                        <li class="bx bxs-heart text-red-600 text-3xl hover:text-gray-400 cursor-pointer mr-3">
-                        @else
-                        <li class="bx bx-heart text-3xl hover:text-gray-400 cursor-pointer mr-3">
-                    @endif
-                    </li>
-                </a>
+            <div class="border-t p-3 flex flex-row">
+                <livewire:like :post="$post" />
+                <a class="grow" onclick="document.getElementById('comment_body').focus()"><i
+                    class="bx bx-comment text-3xl hover:text-gray-400 cursor-pointer ltr:mr-3 rtl:ml-3"></i></a>
 
             </div>
+            <livewire:likedby :post="$post" />
 
             <div class="border-t p-5">
                 <form action="/post/{{ $post->slug }}/comment" method="POST">
@@ -117,3 +118,21 @@
 
 
 </x-app-layout>
+    <script>
+function confirmDelete(postId) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "This action cannot be undone!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('delete-post-form-' + postId).submit();
+        }
+    });
+}
+</script>

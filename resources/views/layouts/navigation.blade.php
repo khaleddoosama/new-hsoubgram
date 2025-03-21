@@ -19,12 +19,22 @@
                 </div>
               
             </div>
-
+          
+              {{-- Home --}}
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
 
                 <div class="hidden md:flex md:flex-row space-x-3 items-center justify-center">
-                    {{-- Home --}}
+                    @guest
+                    <a href="{{ route('login') }}" class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] text-[#1b1b18] border border-transparent hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-sm text-sm leading-normal">
+                        Log in
+                    </a>
+                
+                    <a href="{{ route('register') }}" class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">
+                        Register
+                    </a>
+                    @endguest
+                    @auth  
                     <a class="text-[1.6rem] rtl:ml-3" href="{{ route('home_page') }}">
                         {!! url()->current() == route('home_page')
                             ? '<i class="bx bxs-home-alt-2"></i>'
@@ -37,6 +47,8 @@
                     </a>
 
                     {{-- Create Post --}}
+                    <livewire:modal/>
+
                     <button wire:click="$emit('openModal', 'create-post-modal')">
                         <i class="bx bx-message-square-add text-[1.6rem]"></i>
                     </button>
@@ -89,7 +101,6 @@
 
 
 
-
                 
             </div>
 
@@ -108,7 +119,7 @@
             </div>
         </div>
     </div>
-
+   
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
@@ -142,4 +153,6 @@
             </div>
         </div>
     </div>
+    @endauth
+
 </nav>
