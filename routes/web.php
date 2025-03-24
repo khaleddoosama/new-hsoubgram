@@ -45,5 +45,5 @@ Route::middleware('auth')->group(function () {
         Route::post('send_follow/{user}',[FollowController::class,'follow'])->name('follow');
         Route::delete('/unfollow/{user}', [FollowController::class, 'unfollow'])->name('unfollow');
 
-           
+   
 });

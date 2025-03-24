@@ -19,7 +19,7 @@
                     <img src="{{ Str::startsWith($post->owner->image, 'https') ? $post->owner->image : asset('storage/' . $post->owner->image) }}"
                         alt="{{ $post->owner->username }}" class="mr-5 h-10 w-10 rounded-full">
                     <div class="grow">
-                        <a href="/profile" class="font-bold">{{ $post->owner->username }}</a>
+                        <a href="{{ route('userprofile',$post->owner->username ) }}" class="font-bold">{{ $post->owner->username }}</a>
                     </div>
                         @can('update',$post)
                         <a href="{{ route('get_update_post',$post->slug) }}"><i class="bx bx-message-square-edit text-xl"></i>
@@ -36,24 +36,7 @@
                         @endcan
 
                         @cannot('update',$post)
-                        @if(auth()->user()->isFollowing($post->owner))
-                        <form action="{{ route('unfollow', $post->owner) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="w-30 text-red-400 text-sm font-bold px-3 text-center">
-                                {{ __('Unfollow') }}
-                            </button>
-                        </form>
-                        @elseif(auth()->user()->is_pending($post->owner))
-                        <span class="w-30 bg-gray-400 text-white px-3 rounded text-center self-start">{{ __('Pending') }}</span> 
-                        @else()
-                        <form action="{{ route('follow', $post->owner) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="w-30 text-blue-400 text-sm font-bold px-3 text-center">
-                                {{ __('Follow') }}
-                            </button>
-                        </form> 
-                        @endif
+                        <livewire:followbutton :postOwner="$post->owner" />
                         @endcannot
                 </div>
 

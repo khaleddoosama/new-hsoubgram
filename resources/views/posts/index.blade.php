@@ -5,16 +5,7 @@
 
 
         {{-- Left Side --}}
-        <div class="w-[30rem] mx-auto lg:w-[95rem]">
-            @forelse ($post as $p)
-                <x-post :post="$p" />
-            @empty
-
-                <div class="max-w-2xl gap-8 mx-auto">
-                    {{ __('Start Follwing your friends and Enjoy.') }}
-                </div>
-            @endforelse
-        </div>
+        <livewire:postslist />
 
 
         {{-- Right Side --}}
@@ -57,24 +48,17 @@
                                         <div class="text-gray-500 text-sm">{{ $suggested->name }}</div>
                                 </div>
                                 <div>
-                                    @if(auth()->user()->isFollowing($suggested))
-                                        <!-- Unfollow Button -->
-                                        <form action="{{ route('unfollow', $suggested) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-sm text-red-500 font-bold">
-                                                {{ __('Unfollow') }}
-                                            </button>
-                                        </form>
-                                    @else
-                                        <!-- Follow Button -->
+                                   
+
+                                    <livewire:followbutton :postOwner="$suggested"  />
+                                        {{-- <!-- Follow Button -->
                                         <form action="{{ route('follow', $suggested) }}" method="POST">
                                             @csrf
                                             <button type="submit" class="text-sm text-blue-500 font-bold">
                                                 {{ __('Follow') }}
                                             </button>
-                                        </form>
-                                    @endif
+                                        </form> --}}
+                                  
                                 </div>
                             </li>
                         @endforeach

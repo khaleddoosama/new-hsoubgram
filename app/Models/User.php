@@ -50,6 +50,7 @@ class User extends Authenticatable
         ];
     }
 
+    //relations
     public function posts()
     {
         return $this->hasMany(Post::class);
@@ -58,18 +59,6 @@ class User extends Authenticatable
     public function comment()
     {
         return $this->hasMany(Comment::class);
-    }
-
-    public function suggestedUsers()
-    {
-
-        $user = Auth::user();
-
-        return User::where('id', '!=', $user->id)
-            ->whereNotIn('id', $user->following()->pluck('users.id')) // Exclude followed users
-            ->inRandomOrder()
-            ->limit(5)
-            ->get();
     }
     public function likes()
     {
@@ -84,6 +73,20 @@ class User extends Authenticatable
     public function follower()
     {
         return $this->belongsToMany(User::class, 'follows', 'following_user_id', 'user_id')->withPivot('confirmed');
+    }
+
+    //end of relations
+
+    public function suggestedUsers()
+    {
+
+        $user = Auth::user();
+
+        return User::where('id', '!=', $user->id)
+            ->whereNotIn('id', $user->following()->pluck('users.id')) // Exclude followed users
+            ->inRandomOrder()
+            ->limit(5)
+            ->get();
     }
 
     public function follow(User $user)
@@ -101,15 +104,35 @@ class User extends Authenticatable
         }
 
     }
+    public function unfollow(User $user)
+    {
+        return $this->following()->detach($user->id);
+    }
 
     public function isFollowing(User $user)
     {
-        return $this->following()->where('following_user_id', $user->id)->where('confirmed',true)->exists();
+        return $this->following()->where('following_user_id', $user->id)->where('confirmed', true)->exists();
     }
 
     public function is_pending(User $user)
     {
-       return $this->following()->where('following_user_id', $user->id)->where('confirmed', false)->exists();
+        return $this->following()->where('following_user_id', $user->id)->where('confirmed', false)->exists();
     }
 
+    public function pending_followers()
+    {
+        return $this->follower()->where('confirmed', false);
+    }
+
+    public function confirm(User $user)
+    {
+        return $this->follower()
+            ->where('user_id', $user->id)
+            ->update(['confirmed' => 1]);
+    }
+
+    public function deleteFollowReq(User $user)
+    {
+        return $this->follower()->detach($user);
+    }
 }

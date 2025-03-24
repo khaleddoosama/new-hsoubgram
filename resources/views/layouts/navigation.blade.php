@@ -47,25 +47,27 @@
                     </a>
 
                     {{-- Create Post --}}
-                    <livewire:modal/>
 
-                    <button wire:click="$emit('openModal', 'create-post-modal')">
+                    <button wire:click="$dispatch('openModal', { component: { component: 'create-post-modal' } })">
                         <i class="bx bx-message-square-add text-[1.6rem]"></i>
                     </button>
                     
+                    <x-slot name="content">
+                    </x-slot>
                     <div class="hidden md:block">
                         <x-dropdown align="right" width="96">
                             <x-slot name="trigger">
                                 <button class="text-[1.6rem] ltr:mr-2 rtl:ml-2 leading-5">
                                     <div class="relative">
                                         <i class="bx bxs-inbox"></i>
-                                        {{-- <livewire:pending-followers-count /> --}}
+                                        <livewire:pending-followers-count />
+
                                     </div>
                                 </button>
                             </x-slot>
 
                             <x-slot name="content">
-                                {{-- <livewire:pending-followers-list /> --}}
+                                <livewire:pending-followers-list />
                             </x-slot>
                         </x-dropdown>
                     </div>

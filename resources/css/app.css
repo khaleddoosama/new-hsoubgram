@@ -4,6 +4,9 @@
 
 
 @layer components {
+
+
+    
     .card {
         @apply flex flex-col bg-white my-4 rounded-xl border border-gray-200;
     }
