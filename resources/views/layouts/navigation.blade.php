@@ -19,7 +19,9 @@
                 </div>
               
             </div>
-          
+            <div class="hidden sm:flex sm:items-center">
+                <livewire:search />
+            </div>
               {{-- Home --}}
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -48,7 +50,8 @@
 
                     {{-- Create Post --}}
 
-                    <button wire:click="$dispatch('openModal', { component: { component: 'create-post-modal' } })">
+                  
+                    <button onclick="Livewire.dispatch('openModal', { component: 'create-post-modal'})">
                         <i class="bx bx-message-square-add text-[1.6rem]"></i>
                     </button>
                     

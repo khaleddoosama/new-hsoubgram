@@ -26,7 +26,7 @@
             </div>
             <div class="text-center mb-5">
                 <input type="file" class="hidden" id="fileInput" wire:model="image">
-                <x-button onclick="document.getElementById('fileInput').click()">{{ __('Select from computer') }}</x-button>
+                <x-primary-button onclick="document.getElementById('fileInput').click()">{{ __('Select from computer') }}</x-primary-button>
 
             </div>
         </div>

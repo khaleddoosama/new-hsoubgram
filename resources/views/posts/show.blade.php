@@ -22,8 +22,9 @@
                         <a href="{{ route('userprofile',$post->owner->username ) }}" class="font-bold">{{ $post->owner->username }}</a>
                     </div>
                         @can('update',$post)
-                        <a href="{{ route('get_update_post',$post->slug) }}"><i class="bx bx-message-square-edit text-xl"></i>
-                        </a>
+                        {{-- <a href="{{ route('get_update_post',$post->slug) }}"><i class="bx bx-message-square-edit text-xl"></i>
+                        </a> --}}
+                        <button onclick="Livewire.dispatch('openModal', { component: 'edit-post-modal' ,arguments:{postid:{{ $post->id }}} })" ><i class="bx bx-message-square-edit text-xl"></i></button>
                         @endcan
                         @can('delete',$post)
                         <form id="delete-post-form-{{ $post->id }}" action="{{ route('post.destroy', $post->slug) }}" method="POST" class="inline">
@@ -45,6 +46,27 @@
 
 
             <div class="grow">
+
+                 <div class="flex items-start px-5 py-2">
+                    <img class="h-10 mr-5 w-10 rounded-full"
+                        src="{{ Str::startsWith($post->owner->image, 'https') ? $post->owner->image : asset('storage/' . $post->owner->image) }}"
+                        alt="">
+                    <div class="flex flex-col">
+                        <div>
+                            <a href="{{route('userprofile',$post->owner->username)  }}"
+                                class="font-bold">{{ $post->owner->username }}</a>
+                            {{ $post->description }}
+
+                        </div>
+                        <div class="mt-1 text-sm font-bold text-gray-400">
+                            {{ $post->created_at->diffForHumans(null, true, true) }}
+                        </div>
+                    </div>
+                </div>
+
+
+
+
                 @foreach ($post->comments as $comment)
                     <div class="flex items-start px-5 py-2">
                         <img class="h-10 mr-5 w-10 rounded-full"
