@@ -24,20 +24,19 @@ class ProfileController extends Controller
      * Update the user's profile information.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
-    {   
+    {
         $user = $request->user();
         $data = $request->validated();
 
         // Handle image upload correctly
         if ($request->hasFile('image')) {
-            $imagePath     = $request->file('image')->store('users','public'); // Store in a subfolder
-            $data['image'] =$imagePath ;       // Convert path for asset function
+            $imagePath     = $request->file('image')->store('users', 'public'); // Store in a subfolder
+            $data['image'] = $imagePath;                                        // Convert path for asset function
         }
-        if($request->private_account=='on'){
-            $data['private_account']=1;
-        }
-        else{
-            $data['private_account']=0;
+        if ($request->private_account == 'on') {
+            $data['private_account'] = 1;
+        } else {
+            $data['private_account'] = 0;
         }
         // Fill only validated data
         $user->fill($data);

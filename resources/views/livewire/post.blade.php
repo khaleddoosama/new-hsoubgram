@@ -31,7 +31,7 @@
         @if($post->comments()->count() > 0)
             <a href="/post/{{ $post->slug }}" 
                 class="p-3 font-bold text-sm text-gray-500">
-                {{ __('View all '.$post->comments()->count().' comments') }}
+                {{ __('View all :count comments', ['count' => $post->comments()->count()]) }}
             </a>
     
             @endif

@@ -17,10 +17,10 @@
             <div class="text-3xl mb-2">{{ $user->username }}</div> <!-- Reduced margin-bottom -->
             <livewire:followprofile :user="$user" />
             @guest
-            <div> <a href="/login" class="w-30 bg-blue-400 text-white px-3 py-1 rounded text-center mt-2">
-                {{ __('Follow') }}
-            </a></div>
-               
+                <div> <a href="/login" class="w-30 bg-blue-400 text-white px-3 py-1 rounded text-center mt-2">
+                        {{ __('Follow') }}
+                    </a></div>
+
             @endguest
         </div>
         {{-- User Bio --}}
@@ -32,7 +32,7 @@
         {{-- User stats --}}
         <div
             class="col-span-4 my-5 py-2 border-y border-y-neutral-200 order-4 md:order-3 md:border-none md:px-4 md:col-start-2">
-            <ul class="text-md flex flex-row justify-around md:justify-start md:space-x-10 md:text-xl">
+            <ul class="text-md flex flex-row justify-between md:justify-start md:gap-8 md:text-xl">
                 <li class="flex flex-col md:flex-row text-center">
                     <div class="md:mr-2 font-bold md:font-normal">
                         {{ $user->posts->count() }}
@@ -42,9 +42,8 @@
                     </span>
                 </li>
 
-
                 <li class="flex flex-col md:flex-row text-center">
-                    <div class="md:mr-1 font-bold md:font-normal">
+                    <div class="md:mr-1 rtl:md:ml-1 font-bold md:font-normal">
                         {{ $user->follower()->where('confirmed', true)->count() }}
                     </div>
                     <span class="text-neutral-500 md:text-black">
@@ -53,7 +52,6 @@
                 </li>
 
 
-                
                 <livewire:following :userid="$user->id" />
 
 

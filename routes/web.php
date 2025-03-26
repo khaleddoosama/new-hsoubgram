@@ -6,16 +6,33 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
-
+use App\Http\Middleware\ChangeLanguage;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\App;
 
 
+Route::get('/greeting/{locale}', function (string $locale) {
+    if (! in_array($locale, ['en', 'ar', 'fr'])) {  // Add 'ar' if Arabic is needed
+        abort(400, 'Invalid Language');
+    }
+
+    // Store the selected locale in session
+    Session::put('locale', $locale);
+    
+    // Set locale for the current request
+    App::setLocale($locale);
+
+    return redirect()->back();
+  
+})->name('changeLang');
 require __DIR__ . '/auth.php';
 
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 
 Route::get('/user/{user:username}/',[UserController::class,'index'])

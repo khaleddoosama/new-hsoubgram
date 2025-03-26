@@ -65,10 +65,24 @@
         </div>
         <div class="flex items-center">
             <label class="inline-flex items-center cursor-pointer">
-                <input name="private_account" id="private_account" type="checkbox" class="sr-only peer" {{ $user->private_account ? 'checked' : '' }}>
-                <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
-                <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Private Account</span>
-              </label>
+                <input name="private_account" id="private_account" type="checkbox" class="sr-only peer"
+                    {{ $user->private_account ? 'checked' : '' }}>
+                <div
+                    class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600">
+                </div>
+                <span
+                    class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Private Account') }}</span>
+            </label>
+        </div>
+        <div class="col-span-6 sm:col-span-3">
+            <label for="lang" class="block text-sm font-medium text-gray-700">{{ __('Language') }}</label>
+            <select id="lang" name="lang"
+                class="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 ltr:px-3 rtl:px-8 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+                <option value="ar" {{ $user->lang == 'ar' ? 'selected' : '' }}>العربية
+                </option>
+                <option value="en" {{ $user->lang == 'en' ? 'selected' : '' }}>English
+                </option>
+            </select>
         </div>
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
