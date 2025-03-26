@@ -42,7 +42,11 @@
     @livewire('wire-elements-modal')
    
     @livewireScripts
-
+    <script>
+        document.addEventListener('alpine:init', () => {
+            console.log('Alpine.js Initialized');
+        });
+    </script>
 </body>
 
 </html>

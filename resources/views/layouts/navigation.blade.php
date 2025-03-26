@@ -57,51 +57,94 @@
                     
                     <x-slot name="content">
                     </x-slot>
-                    <div class="hidden md:block">
-                        <x-dropdown align="right" width="96">
-                            <x-slot name="trigger">
-                                <button class="text-[1.6rem] ltr:mr-2 rtl:ml-2 leading-5">
-                                    <div class="relative">
-                                        <i class="bx bxs-inbox"></i>
-                                        <livewire:pending-followers-count />
-
-                                    </div>
-                                </button>
-                            </x-slot>
-
-                            <x-slot name="content">
+                    <div class="hidden md:block relative">
+                        <!-- Dropdown Toggle -->
+                        <button id="followersDropdownTrigger" class="text-[1.6rem] ltr:mr-2 rtl:ml-2 leading-5">
+                            <div class="relative">
+                                <i class="bx bxs-inbox"></i>
+                                <livewire:pending-followers-count />
+                            </div>
+                        </button>
+                    
+                        <!-- Dropdown Menu -->
+                        <div id="followersDropdownMenu" class="absolute right-0 mt-2 w-96 bg-white border border-gray-200 rounded-md shadow-lg hidden">
+                            <div class="py-1">
                                 <livewire:pending-followers-list />
-                            </x-slot>
-                        </x-dropdown>
+                            </div>
+                        </div>
                     </div>
-                    <div class="hidden md:block">
-                        <x-dropdown align="{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}" width="48">
-                            <x-slot name="trigger">
-                                <button
-                                    class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                                    <div>
-                                        <img class="w-6 h-6 -mt-1 object-cover rounded-full border border-gray-500"
-                                        src="{{ Str::startsWith(Auth::user()->image, 'https') ? Auth::user()->image : asset('storage/' . Auth::user()->image ) }}">
-                                    </div>
-
-                                </button>
-                            </x-slot>
-
-                            <x-slot name="content">
-                                <x-dropdown-link :href="route('userprofile', auth()->user())">{{ __('Profile') }}</x-dropdown-link>
-                                <!-- Authentication -->
+                    
+                    <!-- JavaScript for Dropdown -->
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            const dropdownTrigger = document.getElementById("followersDropdownTrigger");
+                            const dropdownMenu = document.getElementById("followersDropdownMenu");
+                    
+                            dropdownTrigger.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                                dropdownMenu.classList.toggle("hidden");
+                            });
+                    
+                            document.addEventListener("click", function () {
+                                dropdownMenu.classList.add("hidden");
+                            });
+                    
+                            dropdownMenu.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                            });
+                        });
+                    </script>
+                    
+                    <div class="hidden md:block relative">
+                        <!-- Dropdown Toggle -->
+                        <button id="dropdownTrigger" class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none">
+                            <div>
+                                <img class="w-6 h-6 -mt-1 object-cover rounded-full border border-gray-500"
+                                     src="{{ Str::startsWith(Auth::user()->image, 'https') ? Auth::user()->image : asset('storage/' . Auth::user()->image ) }}">
+                            </div>
+                        </button>
+                    
+                        <!-- Dropdown Menu -->
+                        <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg hidden">
+                            <div class="py-1">
+                                <!-- Profile Link -->
+                                <a href="{{ route('userprofile', auth()->user()) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    {{ __('Profile') }}
+                                </a>
+                    
+                                <!-- Logout Form -->
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-
-                                    <x-dropdown-link :href="route('logout')"
-                                                     onclick="event.preventDefault();
-                                            this.closest('form').submit();">
+                                    <button type="submit" class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                         {{ __('Log Out') }}
-                                    </x-dropdown-link>
+                                    </button>
                                 </form>
-                            </x-slot>
-                        </x-dropdown>
+                            </div>
+                        </div>
                     </div>
+                    
+                    <!-- JavaScript to Handle Dropdown -->
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            const dropdownTrigger = document.getElementById("dropdownTrigger");
+                            const dropdownMenu = document.getElementById("dropdownMenu");
+                    
+                            dropdownTrigger.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                                dropdownMenu.classList.toggle("hidden");
+                            });
+                    
+                            document.addEventListener("click", function () {
+                                dropdownMenu.classList.add("hidden");
+                            });
+                    
+                            dropdownMenu.addEventListener("click", function (event) {
+                                event.stopPropagation();
+                            });
+                        });
+                    </script>
+                    
+                    
                 </div>
 
 
