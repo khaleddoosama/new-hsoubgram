@@ -11,7 +11,7 @@
         {{-- Right Side --}}
         <div class="hidden w-[60rem] lg:flex lg:flex-col pt-4 ">
 
-            <div class="flex flex-row text-sm">
+            <div class="flex flex-row text-sm gap-2">
                 <div class="mr-5">
                     <a href="{{ route('userprofile',auth()->user()->username) }}">
                         <img src="{{ Str::startsWith(Auth::user()->image, 'https') ? Auth::user()->image : asset('storage/' . Auth::user()->image ) }}"  alt="{{ auth()->user()->username }}"
@@ -33,12 +33,12 @@
 
                     <ul>
                         @foreach ($suggestedusers as $suggested)
-                            <li class="flex flex-row my-5 text-sm justify-items-center">
+                            <li class="flex flex-row my-5 text-sm justify-items-center gap-2">
 
                                 <div class="mr-5">
 
                                    <a href="{{ route('userprofile',$suggested->username) }}">
-                                        <img src="{{ $suggested->image }}"
+                                        <img  src="{{ Str::startsWith($suggested->image, 'https') ? $suggested->image : asset('storage/' . $suggested->image) }}"
                                             class="rounded-full h-9 w-9 border border-gray-300">
                                     </a>
                                 </div>
