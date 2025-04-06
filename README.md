@@ -43,7 +43,10 @@ php artisan key:generate
 ```bash
 php artisan migrate --seed
 ```
-
+### then make storage linking
+```bash
+php artisan storage:link 
+```
 ### 6. Start the Application
 ```bash
 php artisan serve
