@@ -1,11 +1,5 @@
-# Ignore everything inside public
-/public/*
-
-# But do not ignore the "private" directory
-!public/private/
-
-# Do not ignore the "public" directory itself
-!public/
+# Don't ignore the storage directory
+!storage/
 
 # Ensure .gitignore is not ignored
 !.gitignore
