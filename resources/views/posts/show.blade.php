@@ -3,10 +3,9 @@
     <div class="h-screen md:flex md:flex-row">
 
         {{-- Left Side --}}
-        <div class="h-full md:w-7/12 bg-black flex items-center">
+        <div class="flex items-center overflow-hidden bg-black md:w-7/12">
             <img alt="{{ $post->description }}" src="{{ asset('storage/' . $post->image) }}"
-                class="max-h-screen object-cover mx-auto">
-
+                 class="object-cover w-full">
         </div>
 
         {{-- Right Side --}}
