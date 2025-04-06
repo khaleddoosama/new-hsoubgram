@@ -126,15 +126,18 @@
 </x-app-layout>
 <script>
     function confirmDelete(postId) {
+        // Check if the current language is Arabic
+        var isArabic = document.documentElement.lang === 'ar';
+
         Swal.fire({
-            title: 'Are you sure?',
-            text: "This action cannot be undone!",
+            title: isArabic ? 'هل أنت متأكد؟' : 'Are you sure?',
+            text: isArabic ? 'لا يمكن التراجع عن هذا الإجراء!' : 'This action cannot be undone!',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
             cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel'
+            confirmButtonText: isArabic ? 'نعم، احذفه!' : 'Yes, delete it!',
+            cancelButtonText: isArabic ? 'إلغاء' : 'Cancel'
         }).then((result) => {
             if (result.isConfirmed) {
                 document.getElementById('delete-post-form-' + postId).submit();
@@ -142,3 +145,4 @@
         });
     }
 </script>
+
