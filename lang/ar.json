@@ -134,5 +134,7 @@
     "Remove": "حذف",
     "Update": "تعديل",
     "Profile Image":"الصورة الشخصية",
+    "This user does not have any posts.":"لا يوجد اي منشورات لعرضها",
+    "description_empty":"حقل الخاص بالوصف لا يمكن ان يكون فارغ",
     "Start Follwing your friends and Enjoy.":"..ابدأ بمتابعة اصدقائك و استمتع"
 }

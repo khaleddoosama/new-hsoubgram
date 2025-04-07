@@ -69,10 +69,10 @@
                             </button>
 
                             <!-- Dropdown Menu -->
-                            <div id="followersDropdownMenu"
+                            <div  id="followersDropdownMenu"
                                 class="absolute right-0 mt-2 w-96 bg-white border border-gray-200 rounded-md shadow-lg hidden">
                                 <div class="py-1">
-                                    <livewire:pending-followers-list />
+                                    <livewire:pending-followers-list  />
                                 </div>
                             </div>
                         </div>

@@ -1,5 +1,5 @@
     <div class="w-[30rem] mx-auto lg:w-[95rem]">
-        @forelse ($this->post as $p)
+        @forelse ($this->posts as $p)
         <livewire:post :post="$p" wire:key="post-{{ $p->id }}" />
         @empty
 

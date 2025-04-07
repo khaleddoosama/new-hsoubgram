@@ -11,7 +11,7 @@
             @foreach ($filters as $filter)
                 <div class="flex flex-col">
                     <img src="{{ asset('storage/filters_thumb/'.$filter.'.jpg') }}" alt="{{ $filter }}"
-                         class="mb-3 cursor-pointer hover:ring-1 hover:ring-gray-500" wire:click="filter_{{ strtolower($filter) }}">
+                         class="mb-3 cursor-pointer hover:ring-1 hover:ring-gray-500"  wire:click="apply_filter('{{ strtolower($filter) }}')">
                     <span class="text-center text-gray-500">{{ $filter }}</span>
                 </div>
             @endforeach

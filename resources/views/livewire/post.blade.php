@@ -48,9 +48,14 @@
     <div class="card-footer">
         <form action="/post/{{ $post->slug }}/comment" method="POST">
             @csrf
+            @if ($errors->has('body'))
+            <div class="text-red-500 text-sm mb-2">
+                {{ $errors->first('body') }}
+            </div>
+            @endif
             <div class="flex flex-row">
                 <textarea name="body" id="comment_body" placeholder="{{ __('Add a comment...') }}"
-                    class="h-5 grow resize-none overflow-hidden border-none bg-none p-0 placeholder-gray-400 outline-0 focus:ring-0"></textarea>
+                    class="h-5 grow resize-none overflow-hidden border-none bg-none p-0 placeholder-gray-400 outline-0 focus:ring-0" required></textarea>
                 <button type="submit"
                     class="ltr:ml-5 rtl:mr-5 border-none bg-white text-blue-500">{{ __('Comment') }}</button>
             </div>

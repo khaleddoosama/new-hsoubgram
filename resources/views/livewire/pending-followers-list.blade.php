@@ -1,4 +1,4 @@
-<div class="max-h-64 overflow-y-auto">
+<div wire:poll.2s class="max-h-64 overflow-y-auto">
     <ul>
         @forelse(auth()->user()->pending_followers as $pending)
             <li class="flex flex-row w-full p-3 items-center text-sm" wire:key="user-{{ $pending->id }}">

@@ -27,21 +27,18 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request,Post $post)
+    public function store(Request $request, Post $post)
     {
-        $data=$request->validate([
-            'body'=>'required',
-            
+        $data = $request->validate([
+            'body' => 'required|string|min:1',
         ]);
-        
-        $post->comments()->create(
-            [
-            'body'=>$request['body'],
-            'user_id'=>Auth::user()->id,
-            
-            ]);
-        
-            return back();
+        return back()->with('error', 'يجب ان يكون الحقل غير فارغ');
+        $post->comments()->create([
+            'body'    => $data['body'],
+            'user_id' => Auth::id(),
+        ]);
+    
+        return back()->with('success', 'Comment added successfully!');
     }
 
     /**

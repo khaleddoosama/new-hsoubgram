@@ -1,4 +1,5 @@
 <x-app-layout>
+  
     <div class="{{ session('success') ? '' : 'hidden' }} w-50 p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800 absolute right-10 shadow shadow-neutral-200"
         role="alert">
         <span class="font-medium">{{ session('success') }}
@@ -42,16 +43,9 @@
                     </span>
                 </li>
 
-                <li class="flex flex-col md:flex-row text-center">
-                    <div class="md:mr-1 rtl:md:ml-1 font-bold md:font-normal">
-                        {{ $user->follower()->where('confirmed', true)->count() }}
-                    </div>
-                    <span class="text-neutral-500 md:text-black">
-                        {{ $user->follower()->where('confirmed', true)->count() > 1 ? __('followers') : __('follower') }}
-                    </span>
-                </li>
+               
 
-
+                <livewire:followers :userid="$user->id" />
                 <livewire:following :userid="$user->id" />
 
 

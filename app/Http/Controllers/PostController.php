@@ -14,11 +14,17 @@ class PostController extends Controller
      */
     public function index()
     {
-        $id             = Auth::user()->following()->wherePivot('confirmed', true)->pluck('users.id');
-        $post           = Post::whereIn('user_id', $id)->latest()->get();
+        $id = Auth::user()->following()
+            ->wherePivot('confirmed', true)
+            ->pluck('users.id')
+            ->push(Auth::id()); // Add self
+    
+        $post = Post::whereIn('user_id', $id)->latest()->get();
         $suggestedusers = Auth::user()->suggestedUsers();
+    
         return view('posts.index', ['post' => $post, 'suggestedusers' => $suggestedusers]);
     }
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -100,7 +106,8 @@ class PostController extends Controller
         $user=Auth::user();
         $post->delete();
         
-        return view('users.profile',['user'=>$user]);
+        return redirect()->route('userprofile',Auth::user()->username)
+                     ->with('success', 'Post deleted successfully!');
 
     }
 
