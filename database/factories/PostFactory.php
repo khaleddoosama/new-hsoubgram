@@ -17,7 +17,7 @@ class PostFactory extends Factory
      */
     public function definition(): array
     {
-        $images=['j7Ll2InODMOhBeN1ZvZnz5HicG0InR.jpeg','OIP (1).jpeg','OIP (2).jpeg','download.jpeg','2.png','5.png'];
+        $images=['OIP.jpeg','OIP (1).jpeg','OIP (2).jpeg','2.png','5.png'];
         
         return [
            'description'=>fake()->paragraph(),

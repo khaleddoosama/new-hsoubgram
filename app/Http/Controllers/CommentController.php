@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Notifications\PostCommented;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 class CommentController extends Controller
 {
     /**
@@ -30,16 +32,33 @@ class CommentController extends Controller
     public function store(Request $request, Post $post)
     {
         $data = $request->validate([
-            'body' => 'required|string|min:1',
+            'body' => 'required|string|min:1|max:500',
         ]);
-        return back()->with('error', 'يجب ان يكون الحقل غير فارغ');
-        $post->comments()->create([
-            'body'    => $data['body'],
+
+        $comment = $post->comments()->create([
+            'body' => $data['body'],
             'user_id' => Auth::id(),
         ]);
-    
+
+        // Notify post owner if it's not their own comment
+        if ($post->user_id != Auth::id()) {
+            $post->owner->notify(new PostCommented($post, Auth::user()));
+        }
+        // Dispatch Livewire event
+        // $this->dispatchLivewireEvent($post);
         return back()->with('success', 'Comment added successfully!');
     }
+
+    // protected function dispatchLivewireEvent(Post $post)
+    // {
+    //     // Dispatch browser event that Livewire can listen to
+    //     // This works for both Livewire components and regular JS
+    //     event(new \App\Events\CommentAdded($post->fresh()->load('comments')));
+        
+    //     // Alternative: Direct Livewire event dispatch
+    //     // This only works if you know the specific Livewire component to target
+    //     \Livewire::dispatch('commentAdded', ['post_id' => $post->id]);
+    // }
 
     /**
      * Display the specified resource.

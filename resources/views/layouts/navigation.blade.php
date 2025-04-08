@@ -44,7 +44,42 @@
                                 ? '<i class="bx bxs-home-alt-2"></i>'
                                 : '<i class="bx bx-home-alt-2"></i>' !!}
                         </a>
+                        <!-- Notifications Dropdown -->
+                        <div class="relative">
+                            <button id="notificationsDropdownTrigger" class="text-[1.6rem] flex items-center">
+                                <i class="bx bx-bell"></i>
+                                <livewire:notifications-count />
+                            </button>
 
+                            <!-- Dropdown Menu -->
+                            <div id="notificationsDropdownMenu"
+                                class="absolute right-0 mt-2 w-96 bg-white border border-gray-200 rounded-md shadow-lg hidden">
+                                <div class="py-1">
+                                    <livewire:notifications-dropdown />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- JavaScript for Notifications Dropdown -->
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                const dropdownTrigger = document.getElementById("notificationsDropdownTrigger");
+                                const dropdownMenu = document.getElementById("notificationsDropdownMenu");
+
+                                dropdownTrigger.addEventListener("click", function(event) {
+                                    event.stopPropagation();
+                                    dropdownMenu.classList.toggle("hidden");
+                                });
+
+                                document.addEventListener("click", function() {
+                                    dropdownMenu.classList.add("hidden");
+                                });
+
+                                dropdownMenu.addEventListener("click", function(event) {
+                                    event.stopPropagation();
+                                });
+                            });
+                        </script>
                         {{-- Explore --}}
                         <a class="text-[1.6rem]" href="{{ route('explore') }}">
                             {!! url()->current() == route('explore') ? '<i class="bx bxs-compass"></i>' : '<i class="bx bx-compass"></i>' !!}
@@ -69,10 +104,10 @@
                             </button>
 
                             <!-- Dropdown Menu -->
-                            <div  id="followersDropdownMenu"
+                            <div id="followersDropdownMenu"
                                 class="absolute right-0 mt-2 w-96 bg-white border border-gray-200 rounded-md shadow-lg hidden">
                                 <div class="py-1">
-                                    <livewire:pending-followers-list  />
+                                    <livewire:pending-followers-list />
                                 </div>
                             </div>
                         </div>
